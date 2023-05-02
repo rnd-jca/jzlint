@@ -11,7 +11,9 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
 import java.security.SignatureException;
+import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
+import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -19,14 +21,18 @@ import java.util.Date;
 import java.util.Random;
 
 import org.bouncycastle.asn1.ASN1Encoding;
+import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.cert.X509CRLHolder;
 import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.X509v2CRLBuilder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509CRLConverter;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -105,6 +111,10 @@ public class CAExtension implements BeforeAllCallback {
         return this.caPrivateKey;
     }
 
+    public PublicKey getCaPublicKey() {
+        return this.caPublicKey;
+    }
+
     public X509Certificate createEECertificate() throws NoSuchAlgorithmException, IOException, OperatorCreationException, CertificateException, NoSuchProviderException, SignatureException, InvalidKeyException {
 
         BigInteger serialNumber = new BigInteger(96, new Random());
@@ -135,9 +145,39 @@ public class CAExtension implements BeforeAllCallback {
 
     }
 
+    public X509CRL createCRL() throws NoSuchAlgorithmException, IOException, OperatorCreationException, CRLException {
+
+        Date thisUpdate = Date.from(LocalDateTime.now().minusHours(1).atZone(ZoneId.systemDefault()).toInstant());
+        Date nextUpdate = Date.from(LocalDateTime.now().plusDays(1).atZone(ZoneId.systemDefault()).toInstant());
+
+        AuthorityKeyIdentifier aki = new JcaX509ExtensionUtils().createAuthorityKeyIdentifier(caPublicKey);
+        Extension akie = new Extension(Extension.authorityKeyIdentifier, false, aki.toASN1Primitive().getEncoded(ASN1Encoding.DER));
+        Extension crlNumber = new Extension(Extension.cRLNumber, false, new ASN1Integer(1).getEncoded(ASN1Encoding.DER));
+
+        X509v2CRLBuilder crlBuilder = new X509v2CRLBuilder(caIssuerDN, thisUpdate);
+        crlBuilder.setNextUpdate(nextUpdate);
+        crlBuilder.addExtension(akie);
+        crlBuilder.addExtension(crlNumber);
+        ContentSigner contentSigner = new JcaContentSignerBuilder(SHA_256_WITH_RSA_ENCRYPTION).setProvider(BouncyCastleProvider.PROVIDER_NAME).build(caPrivateKey);
+        X509CRLHolder holder = crlBuilder.build(contentSigner);
+
+        return new JcaX509CRLConverter().setProvider(BouncyCastleProvider.PROVIDER_NAME).getCRL(holder);
+
+    }
+
     public void assertLintResult(LintResult expectedResult, boolean expectedCheckApplies, JavaIssuerLint lint, X509Certificate issuedCertificate, X509Certificate issuerCertificate) {
         assertEquals(expectedCheckApplies, lint.checkApplies(issuedCertificate, issuerCertificate));
-        assertEquals(expectedResult.getStatus(), lint.execute(issuedCertificate, issuerCertificate).getStatus());
+        if (expectedCheckApplies) {
+            assertEquals(expectedResult.getStatus(), lint.execute(issuedCertificate, issuerCertificate).getStatus());
+        }
+    }
+
+    public void assertCRLIssuerLintResult(LintResult expectedResult, boolean expectedCheckApplies, JavaCRLIssuerLint lint, X509CRL crl, X509Certificate issuerCertificate) {
+        assertEquals(expectedCheckApplies, lint.checkApplies(crl, issuerCertificate));
+        if (expectedCheckApplies) {
+            assertEquals(expectedResult.getStatus(), lint.execute(crl, issuerCertificate).getStatus());
+        }
+
     }
 
 }

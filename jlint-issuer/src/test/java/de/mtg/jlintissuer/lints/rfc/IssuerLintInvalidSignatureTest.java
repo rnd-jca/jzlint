@@ -47,17 +47,17 @@ class IssuerLintInvalidSignatureTest {
     void passTest() throws CertificateException, NoSuchAlgorithmException, IOException, SignatureException, OperatorCreationException, NoSuchProviderException, InvalidKeyException {
         X509Certificate caCertificate = caExtension.getCaCertificate();
         X509Certificate issuedCertificate = caExtension.createEECertificate();
-        caExtension.assertLintResult(LintResult.of(Status.PASS), true, new IssuerLintKeyIdentifierMismatch(), issuedCertificate, caCertificate);
+        caExtension.assertLintResult(LintResult.of(Status.PASS), true, new IssuerLintInvalidSignature(), issuedCertificate, caCertificate);
     }
 
     @Test
     void errorTest() throws NoSuchAlgorithmException, IOException, NoSuchProviderException, CertificateException, OperatorCreationException {
         X509Certificate caCertificate = caExtension.getCaCertificate();
-        X509Certificate issuedCertificate = createWrongCertificate(caExtension.getIsserDN());
-        caExtension.assertLintResult(LintResult.of(Status.ERROR), true, new IssuerLintKeyIdentifierMismatch(), issuedCertificate, caCertificate);
+        X509Certificate issuedCertificate = createWrongCertificate(caExtension.getIsserDN(), caExtension.getCaPublicKey());
+        caExtension.assertLintResult(LintResult.of(Status.ERROR), true, new IssuerLintInvalidSignature(), issuedCertificate, caCertificate);
     }
 
-    private X509Certificate createWrongCertificate(X500Name issuerDN) throws NoSuchAlgorithmException, IOException, OperatorCreationException, CertificateException, NoSuchProviderException {
+    private X509Certificate createWrongCertificate(X500Name caIssuerDN, PublicKey caPublicKey) throws NoSuchAlgorithmException, IOException, OperatorCreationException, CertificateException, NoSuchProviderException {
 
         BigInteger serialNumber = new BigInteger(96, new Random());
         Date notBefore = Date.from(LocalDateTime.now().minusHours(1).atZone(ZoneId.systemDefault()).toInstant());
@@ -72,15 +72,15 @@ class IssuerLintInvalidSignatureTest {
 
         X500Name subjectDN = new X500Name("CN=Certificate, O=Lint, C=DE");
 
-        AuthorityKeyIdentifier aki = new JcaX509ExtensionUtils().createAuthorityKeyIdentifier(publicKey);
+        AuthorityKeyIdentifier aki = new JcaX509ExtensionUtils().createAuthorityKeyIdentifier(caPublicKey);
         SubjectKeyIdentifier ski = new JcaX509ExtensionUtils().createSubjectKeyIdentifier(publicKey);
         Extension akie = new Extension(Extension.authorityKeyIdentifier, false, aki.toASN1Primitive().getEncoded(ASN1Encoding.DER));
         Extension skie = new Extension(Extension.subjectKeyIdentifier, false, ski.toASN1Primitive().getEncoded(ASN1Encoding.DER));
 
-        X509v3CertificateBuilder certificateBuilder = new X509v3CertificateBuilder(issuerDN, serialNumber, notBefore, noteAfter, subjectDN, subjectPublicKeyInfo);
+        X509v3CertificateBuilder certificateBuilder = new X509v3CertificateBuilder(caIssuerDN, serialNumber, notBefore, noteAfter, subjectDN, subjectPublicKeyInfo);
         certificateBuilder.addExtension(akie);
         certificateBuilder.addExtension(skie);
-        ContentSigner contentSigner = new JcaContentSignerBuilder(CAExtension.SHA_256_WITH_RSA_ENCRYPTION).setProvider(BouncyCastleProvider.PROVIDER_NAME).build(keyPair.getPrivate()); // use own key
+        ContentSigner contentSigner = new JcaContentSignerBuilder(CAExtension.SHA_256_WITH_RSA_ENCRYPTION).setProvider(BouncyCastleProvider.PROVIDER_NAME).build(keyPair.getPrivate());
         X509CertificateHolder x509CertificateHolder = certificateBuilder.build(contentSigner);
 
         return new JcaX509CertificateConverter().setProvider(BouncyCastleProvider.PROVIDER_NAME).getCertificate(x509CertificateHolder);
