@@ -51,6 +51,7 @@ import de.mtg.jzlint.JavaLint;
 import de.mtg.jzlint.LintJSONResult;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Runner;
+import de.mtg.jzlint.Status;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -292,9 +293,14 @@ public class CAExtension implements BeforeAllCallback {
         assertEquals(expectedResult.getStatus().name().toLowerCase(Locale.ROOT), lintResult.getResult());
     }
 
-    public void assertLintResult(LintResult expectedResult, boolean expectedCheckApplies, JavaCRLLint lint, X509CRL crl) {
+    public void assertLintResult(LintResult expectedResult, boolean expectedCheckApplies, JavaCRLLint lint, X509CRL crl, String expectedMessage) {
         assertEquals(expectedCheckApplies, lint.checkApplies(crl));
-        assertEquals(expectedResult.getStatus(), lint.execute(crl).getStatus());
+        if (expectedResult.getStatus() != Status.NA) {
+            assertEquals(expectedResult.getStatus(), lint.execute(crl).getStatus());
+        }
+        if (expectedMessage != null && !expectedMessage.isEmpty()) {
+            assertEquals(expectedMessage, lint.execute(crl).getDetails());
+        }
     }
 
 }

@@ -8,6 +8,7 @@ import de.mtg.jzlint.Status;
 
 @ExtendWith(LintTestExtension.class)
 class ExtIanUriFormatInvalidTest {
+
     @LintTest(
             name = "e_ext_ian_uri_format_invalid",
             filename = "IANURIValid.pem",

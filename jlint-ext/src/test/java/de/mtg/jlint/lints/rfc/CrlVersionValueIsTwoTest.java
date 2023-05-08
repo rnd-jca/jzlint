@@ -1,12 +1,20 @@
-package de.mtg.jlint.lints.crl;
+package de.mtg.jlint.lints.rfc;
+
+import de.mtg.jlint.lints.CAExtension;
+import de.mtg.jzlint.LintResult;
+import de.mtg.jzlint.Status;
+import org.bouncycastle.asn1.*;
+import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.Signature;
-import java.security.SignatureException;
+import java.security.*;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -15,26 +23,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-import org.bouncycastle.asn1.ASN1EncodableVector;
-import org.bouncycastle.asn1.ASN1Encoding;
-import org.bouncycastle.asn1.ASN1GeneralizedTime;
-import org.bouncycastle.asn1.ASN1Integer;
-import org.bouncycastle.asn1.DERBitString;
-import org.bouncycastle.asn1.DERNull;
-import org.bouncycastle.asn1.DERSequence;
-import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
-import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.operator.OperatorCreationException;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
-
-import de.mtg.jlint.lints.CAExtension;
-import de.mtg.jlint.lints.rfc.CrlVersionValueMandatory;
-import de.mtg.jzlint.LintResult;
-import de.mtg.jzlint.Status;
-
-class CrlVersionValueMandatoryTest {
+class CrlVersionValueIsTwoTest {
 
     @RegisterExtension
     static CAExtension caExtension = new CAExtension();
@@ -42,13 +31,13 @@ class CrlVersionValueMandatoryTest {
     @Test
     void passTest() throws NoSuchAlgorithmException, IOException, OperatorCreationException, CRLException {
         X509CRL crl = caExtension.createCRL();
-        caExtension.assertLintResult(LintResult.of(Status.PASS), true, new CrlVersionValueMandatory(), crl);
+        caExtension.assertLintResult(LintResult.of(Status.PASS), true, new CrlVersionValueIsTwo(), crl, null);
     }
 
     @Test
     void errorTest() throws NoSuchAlgorithmException, IOException, NoSuchProviderException, CertificateException, SignatureException, InvalidKeyException, CRLException {
         X509CRL crl = createWrongCRL();
-        caExtension.assertLintResult(LintResult.of(Status.ERROR), true, new CrlVersionValueMandatory(), crl);
+        caExtension.assertLintResult(LintResult.of(Status.ERROR), true, new CrlVersionValueIsTwo(), crl, "CRL is not version 2 but it is version 1");
     }
 
     private X509CRL createWrongCRL() throws NoSuchAlgorithmException, IOException, CRLException, NoSuchProviderException, InvalidKeyException, SignatureException, CertificateException {
@@ -64,6 +53,11 @@ class CrlVersionValueMandatoryTest {
         tBSCertListVector.add(new ASN1GeneralizedTime(thisUpdate));
         tBSCertListVector.add(new ASN1GeneralizedTime(nextUpdate));
         tBSCertListVector.add(new DERSequence());
+
+        ASN1EncodableVector extensions = new ASN1EncodableVector();
+        extensions.add(new Extension(Extension.cRLNumber, false, new ASN1Integer(1).getEncoded(ASN1Encoding.DER)));
+        tBSCertListVector.add(new DERTaggedObject(true, 0, new DERSequence(extensions)));
+
         DERSequence tBSCertList = new DERSequence(tBSCertListVector);
 
         Signature jcaSignature = Signature.getInstance(PKCSObjectIdentifiers.sha256WithRSAEncryption.getId(), BouncyCastleProvider.PROVIDER_NAME);
@@ -79,9 +73,10 @@ class CrlVersionValueMandatoryTest {
         byte[] rawCRL = new DERSequence(certificateListVector).getEncoded(ASN1Encoding.DER);
 
         CertificateFactory cf = CertificateFactory.getInstance("X.509", BouncyCastleProvider.PROVIDER_NAME);
+
         try (ByteArrayInputStream bais = new ByteArrayInputStream(rawCRL)) {
             return (X509CRL) cf.generateCRL(bais);
         }
-
     }
+
 }

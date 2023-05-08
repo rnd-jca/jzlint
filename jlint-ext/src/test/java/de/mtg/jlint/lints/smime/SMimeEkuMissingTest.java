@@ -35,7 +35,6 @@ import de.mtg.jlint.lints.CAExtension;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Status;
 
-
 class SMimeEkuMissingTest {
 
     @RegisterExtension

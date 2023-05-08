@@ -10,8 +10,7 @@ import de.mtg.jzlint.Source;
 import de.mtg.jzlint.Status;
 
 /**
- * Conforming CAs are not required to issue CRLs if other revocation or
- * certificate status mechanisms are provided.  When CRLs are issued,
+ * When CRLs are issued,
  * the CRLs MUST be version 2 CRLs, include the date by which the next
  * CRL will be issued in the nextUpdate field (Section 5.1.2.5), include
  * the CRL number extension (Section 5.2.3), and include the authority
@@ -20,19 +19,20 @@ import de.mtg.jzlint.Status;
 
 
 @Lint(
-        name = "e_crl_version_value_mandatory",
-        description = "Check if the version of the CRL is 2.",
+        name = "e_crl_version_value_is_two",
+        description = "Check if the version of the CRL is 2 (the integer value is 1).",
         citation = "RFC 5280, Sec. 5",
         source = Source.RFC5280,
         effectiveDate = EffectiveDate.RFC5280)
-public class CrlVersionValueMandatory implements JavaCRLLint {
+public class CrlVersionValueIsTwo implements JavaCRLLint {
 
     @Override
     public LintResult execute(X509CRL crl) {
+
         if (crl.getVersion() == 2) {
             return LintResult.of(Status.PASS);
         }
-        return LintResult.of(Status.ERROR);
+        return LintResult.of(Status.ERROR, String.format("CRL is not version 2 but it is version %d", crl.getVersion()));
     }
 
     @Override
