@@ -19,7 +19,7 @@ import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
 import de.mtg.jzlint.Status;
-import de.mtg.jzlint.utils.Utils;
+import de.mtg.jzlint.utils.CRLUtils;
 
 @Lint(
         name = "e_crl_issuer_lint_key_identifier_mismatch",
@@ -64,7 +64,7 @@ public class CRLIssuerLintKeyIdentifierMismatch implements JavaCRLIssuerLint {
     }
 
     private static Optional<byte[]> getAKIKeyIdentifier(X509CRL crl) {
-        if (!Utils.hasExtension(crl, Extension.authorityKeyIdentifier.getId())) {
+        if (!CRLUtils.hasExtension(crl, Extension.authorityKeyIdentifier.getId())) {
             return Optional.empty();
         }
         byte[] rawAKI = crl.getExtensionValue(Extension.authorityKeyIdentifier.getId());

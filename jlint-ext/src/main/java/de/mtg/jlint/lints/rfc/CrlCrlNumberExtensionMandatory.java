@@ -2,6 +2,7 @@ package de.mtg.jlint.lints.rfc;
 
 import java.security.cert.X509CRL;
 
+import de.mtg.jzlint.utils.CRLUtils;
 import org.bouncycastle.asn1.x509.Extension;
 
 import de.mtg.jzlint.EffectiveDate;
@@ -31,7 +32,7 @@ public class CrlCrlNumberExtensionMandatory implements JavaCRLLint {
 
     @Override
     public LintResult execute(X509CRL crl) {
-        if (Utils.hasExtension(crl, Extension.cRLNumber.getId())) {
+        if (CRLUtils.hasExtension(crl, Extension.cRLNumber.getId())) {
             return LintResult.of(Status.PASS);
         }
         return LintResult.of(Status.ERROR);

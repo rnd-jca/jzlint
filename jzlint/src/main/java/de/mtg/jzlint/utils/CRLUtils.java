@@ -15,6 +15,10 @@ public class CRLUtils {
         // empty
     }
 
+    public static boolean hasExtension(X509CRL crl, String oid) {
+        return crl.getExtensionValue(oid) != null;
+    }
+
     public static boolean hasExtensions(X509CRL crl) {
 
         try {

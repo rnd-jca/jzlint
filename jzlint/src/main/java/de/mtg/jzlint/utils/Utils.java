@@ -11,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
-import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -261,10 +260,6 @@ public class Utils {
 
     public static boolean hasDNSNames(X509Certificate certificate) throws IOException {
         return !getDNSNames(certificate).isEmpty();
-    }
-
-    public static boolean hasExtension(X509CRL crl, String oid) {
-        return crl.getExtensionValue(oid) != null;
     }
 
     public static boolean hasExtension(X509Certificate certificate, String oid) {

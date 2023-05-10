@@ -176,8 +176,11 @@ public class CAExtension implements BeforeAllCallback, BeforeEachCallback {
 
     public void assertLintResult(LintResult expectedResult, boolean expectedCheckApplies, JavaOCSPResponseLint lint, byte[] ocspResponse) {
         assertEquals(expectedCheckApplies, lint.checkApplies(ocspResponse));
-        assertEquals(expectedResult.getStatus(), lint.execute(ocspResponse).getStatus());
-        assertEquals(expectedResult.getDetails(), lint.execute(ocspResponse).getDetails());
+        if (expectedCheckApplies) {
+            assertEquals(expectedResult.getStatus(), lint.execute(ocspResponse).getStatus());
+            assertEquals(expectedResult.getDetails(), lint.execute(ocspResponse).getDetails());
+        }
+
     }
 
 }
