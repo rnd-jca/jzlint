@@ -2,7 +2,6 @@ package de.mtg.jlint.lints.rfc;
 
 import java.security.cert.X509CRL;
 
-import de.mtg.jzlint.utils.CRLUtils;
 import org.bouncycastle.asn1.x509.Extension;
 
 import de.mtg.jzlint.EffectiveDate;
@@ -11,7 +10,7 @@ import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
 import de.mtg.jzlint.Status;
-import de.mtg.jzlint.utils.Utils;
+import de.mtg.jzlint.utils.CRLUtils;
 
 /**
  * Conforming CAs are not required to issue CRLs if other revocation or

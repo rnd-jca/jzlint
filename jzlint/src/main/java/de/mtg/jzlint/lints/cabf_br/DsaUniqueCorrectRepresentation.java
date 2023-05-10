@@ -32,7 +32,7 @@ public class DsaUniqueCorrectRepresentation implements JavaLint {
         final BigInteger two = BigInteger.valueOf(2);
         final BigInteger pMinusTwo = p.subtract(two);
 
-        if (y.compareTo(two) == -1 || y.compareTo(pMinusTwo) == 1) {
+        if (y.compareTo(two) < 0 || y.compareTo(pMinusTwo) > 0) {
             return LintResult.of(Status.ERROR);
         }
 
