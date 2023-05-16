@@ -8,6 +8,7 @@ import de.mtg.jzlint.Status;
 
 @ExtendWith(LintTestExtension.class)
 class CertUniqueIdentifierVersionNot2Or3Test {
+
     @LintTest(
             name = "e_cert_unique_identifier_version_not_2_or_3",
             filename = "uniqueIdVersion3.pem",
@@ -21,4 +22,5 @@ class CertUniqueIdentifierVersionNot2Or3Test {
             expectedResultStatus = Status.ERROR)
     void testCase02() {
     }
+
 }

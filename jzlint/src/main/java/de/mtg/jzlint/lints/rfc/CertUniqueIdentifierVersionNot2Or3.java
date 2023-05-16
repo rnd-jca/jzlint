@@ -33,15 +33,18 @@ public class CertUniqueIdentifierVersionNot2Or3 implements JavaLint {
     @Override
     public LintResult execute(X509Certificate certificate) {
 
-        if (certificate.getVersion() == 2 || certificate.getVersion() == 3) {
-            return LintResult.of(Status.PASS);
+        boolean hasUniqueIdField = certificate.getIssuerUniqueID() != null || certificate.getSubjectUniqueID() != null;
+
+        if (hasUniqueIdField && (certificate.getVersion() != 2 && certificate.getVersion() != 3)) {
+            return LintResult.of(Status.ERROR);
         }
 
-        return LintResult.of(Status.ERROR);
+        return LintResult.of(Status.PASS);
     }
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return certificate.getIssuerUniqueID() != null || certificate.getSubjectUniqueID() != null;
+        return true;
     }
+
 }
