@@ -29,7 +29,7 @@ import de.mtg.jzlint.utils.OCSPUtils;
  */
 
 @Lint(
-        name = "e_ocsp_contains_reasonCode",
+        name = "e_ocsp_contains_reasoncode",
         description = "Check if the OCSP response contains the reasonCode CRL entry extension in the singleExtensions.",
         citation = "BRs: 7.3.2",
         source = Source.CABF_BASELINE_REQUIREMENTS,
