@@ -28,7 +28,6 @@ class SubCertValidTimeLongerThan825DaysTest {
             name = "e_sub_cert_valid_time_longer_than_825_days",
             filename = "subCert825DaysOK.pem",
             expectedResultStatus = Status.PASS)
-    @Disabled("The Java implementation is correct")
     void testCase03() {
     }
 

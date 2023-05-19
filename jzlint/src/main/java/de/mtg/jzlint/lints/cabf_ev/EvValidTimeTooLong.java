@@ -23,7 +23,7 @@ public class EvValidTimeTooLong implements JavaLint {
     @Override
     public LintResult execute(X509Certificate certificate) {
 
-        int validityInMonths = DateUtils.getValidityInMonths(certificate);
+        int validityInMonths = DateUtils.getValidityInMonthsBeforeSC31(certificate);
 
         if (validityInMonths > 27) {
             return LintResult.of(Status.ERROR);

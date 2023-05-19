@@ -29,4 +29,5 @@ class ExtIanUriFormatInvalidTest {
             expectedResultStatus = Status.ERROR)
     void testCase03() {
     }
+
 }

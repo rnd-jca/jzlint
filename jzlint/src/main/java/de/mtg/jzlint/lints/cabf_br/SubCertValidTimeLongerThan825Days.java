@@ -22,11 +22,9 @@ public class SubCertValidTimeLongerThan825Days implements JavaLint {
     @Override
     public LintResult execute(X509Certificate certificate) {
 
-        int validityInDays = DateUtils.getValidityInDays(certificate);
+        int validityInDays = DateUtils.getValidityInDaysBeforeSC31(certificate);
 
         if (validityInDays > 825) {
-//            return LintResult.of(Status.ERROR);
-            // TODO change compared to zlint
             return LintResult.of(Status.ERROR, String.format("NotBefore: %s, NotAfter: %s", DateUtils.getNotBefore(certificate), DateUtils.getNotAfter(certificate)));
         }
         return LintResult.of(Status.PASS);

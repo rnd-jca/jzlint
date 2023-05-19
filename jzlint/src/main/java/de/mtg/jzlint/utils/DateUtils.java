@@ -81,7 +81,6 @@ public final class DateUtils {
         }
     }
 
-
     public static ZonedDateTime getNotAfter(X509Certificate certificate) {
         return ZonedDateTime.ofInstant(certificate.getNotAfter().toInstant(), ZoneId.of(UTC));
     }
@@ -94,20 +93,54 @@ public final class DateUtils {
         return getValidityInDays(notAfter.toEpochSecond(), notBefore.toEpochSecond());
     }
 
+    public static int getValidityInDaysBeforeSC31(X509Certificate certificate) {
+
+        ZonedDateTime notBefore = getNotBefore(certificate);
+        ZonedDateTime notAfter = getNotAfter(certificate);
+
+        return getValidityInDaysBeforeSC31(notAfter, notBefore);
+    }
+
     public static int getValidityInMonths(X509Certificate certificate) {
         ZonedDateTime notBefore = getNotBefore(certificate);
         ZonedDateTime notAfter = getNotAfter(certificate);
         return getValidityInMonths(notAfter, notBefore);
     }
 
+    public static int getValidityInMonthsBeforeSC31(X509Certificate certificate) {
+        ZonedDateTime notBefore = getNotBefore(certificate);
+        ZonedDateTime notAfter = getNotAfter(certificate);
+        return getValidityInMonthsBeforeSC31(notAfter, notBefore);
+    }
+
     public static int getValidityInDays(long end, long start) {
         return (int) Math.floorDiv((end - start), NUMBER_OF_SECONDS_IN_DAY) + 1;
+    }
+
+    public static int getValidityInDaysBeforeSC31(ZonedDateTime end, ZonedDateTime start) {
+
+        int rfcNumberOfDays = getValidityInDays(end.toEpochSecond(), start.toEpochSecond());
+        int days = rfcNumberOfDays - 2;
+
+        while (!(start.plusDays(days).isAfter(end) || start.plusDays(days).isEqual(end))) {
+            days += 1;
+        }
+        return days;
     }
 
     public static int getValidityInMonths(ZonedDateTime end, ZonedDateTime start) {
         int days = getValidityInDays(end.toEpochSecond(), start.toEpochSecond());
         int months = Math.floorDiv(days, 32);
         while (!start.plusMonths(months).isAfter(end)) {
+            months += 1;
+        }
+        return months;
+    }
+
+    public static int getValidityInMonthsBeforeSC31(ZonedDateTime end, ZonedDateTime start) {
+        int days = getValidityInDays(end.toEpochSecond(), start.toEpochSecond());
+        int months = Math.floorDiv(days, 32);
+        while (!(start.plusMonths(months).isAfter(end) || start.plusMonths(months).isEqual(end))) {
             months += 1;
         }
         return months;

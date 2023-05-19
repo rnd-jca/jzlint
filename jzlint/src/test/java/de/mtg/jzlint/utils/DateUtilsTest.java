@@ -32,6 +32,19 @@ class DateUtilsTest {
 
     @ParameterizedTest
     @CsvSource({
+            "2022-01-03 08:00:00,2022-01-01 08:00:00,2",
+            "2022-01-03 08:00:01,2022-01-01 08:00:00,3",
+            "2023-01-01 08:00:00,2022-01-01 08:00:00,365"})
+    void getValidityInDaysBeforeSC31(String end, String start, String expected) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC"));
+        ZonedDateTime endZDT = ZonedDateTime.parse(end, formatter);
+        ZonedDateTime startZDT = ZonedDateTime.parse(start, formatter);
+        Integer expectedInteger = Integer.parseInt(expected);
+        assertEquals(expectedInteger.intValue(), DateUtils.getValidityInDaysBeforeSC31(endZDT, startZDT));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
             "2022-03-01 08:00:00,2022-01-01 08:00:00,3",
             "2022-03-01 08:00:00,2022-01-02 08:00:00,2",
             "2023-03-01 08:00:00,2022-01-02 08:00:00,14",
@@ -42,6 +55,21 @@ class DateUtilsTest {
         ZonedDateTime startZDT = ZonedDateTime.parse(start, formatter);
         Integer expectedInteger = Integer.parseInt(expected);
         assertEquals(expectedInteger.intValue(), DateUtils.getValidityInMonths(endZDT, startZDT));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2022-03-01 08:00:00,2022-01-01 08:00:00,2",
+            "2022-03-01 08:00:01,2022-01-01 08:00:00,3",
+            "2022-03-01 08:00:00,2022-01-02 08:00:00,2",
+            "2023-03-01 08:00:00,2022-01-02 08:00:00,14",
+            "2023-03-01 08:00:00,2022-01-01 08:00:00,14"})
+    void getValidityInMonthsBeforeSC31(String end, String start, String expected) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC"));
+        ZonedDateTime endZDT = ZonedDateTime.parse(end, formatter);
+        ZonedDateTime startZDT = ZonedDateTime.parse(start, formatter);
+        Integer expectedInteger = Integer.parseInt(expected);
+        assertEquals(expectedInteger.intValue(), DateUtils.getValidityInMonthsBeforeSC31(endZDT, startZDT));
     }
 
 }
