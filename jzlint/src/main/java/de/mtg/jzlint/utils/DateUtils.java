@@ -122,7 +122,7 @@ public final class DateUtils {
         int rfcNumberOfDays = getValidityInDays(end.toEpochSecond(), start.toEpochSecond());
         int days = rfcNumberOfDays - 2;
 
-        while (!(start.plusDays(days).isAfter(end) || start.plusDays(days).isEqual(end))) {
+        while (start.plusDays(days).isBefore(end)) {
             days += 1;
         }
         return days;
@@ -140,7 +140,7 @@ public final class DateUtils {
     public static int getValidityInMonthsBeforeSC31(ZonedDateTime end, ZonedDateTime start) {
         int days = getValidityInDays(end.toEpochSecond(), start.toEpochSecond());
         int months = Math.floorDiv(days, 32);
-        while (!(start.plusMonths(months).isAfter(end) || start.plusMonths(months).isEqual(end))) {
+        while (start.plusMonths(months).isBefore(end)) {
             months += 1;
         }
         return months;
