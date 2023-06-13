@@ -25,7 +25,7 @@ import de.mtg.jzlint.utils.Utils;
  ************************************************/
 @Lint(
         name = "e_ca_subject_field_empty",
-        description = "CA Certificates subject field MUST not be empty and MUST have a non-empty distinguished name",
+        description = "The subject field of a CA certificate MUST have a non-empty distinguished name",
         citation = "RFC 5280: 4.1.2.6",
         source = Source.RFC2459,
         effectiveDate = EffectiveDate.RFC2459)
@@ -45,4 +45,5 @@ public class CASubjectFieldEmpty implements JavaLint {
     public boolean checkApplies(X509Certificate certificate) {
         return Utils.isCA(certificate);
     }
+
 }
