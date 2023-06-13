@@ -42,13 +42,9 @@ public class SubjectGivenNameRecommendedMaxLength implements JavaLint {
         return LintResult.of(Status.PASS);
     }
 
-    // TODO
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return true;
+        return !Utils.getSubjectDNNameComponent(certificate, BCStyle.GIVENNAME.getId()).isEmpty();
     }
-//    @Override
-//    public boolean checkApplies(X509Certificate certificate) {
-//        return !Util.getSubjectDNNameComponent(certificate, BCStyle.GIVENNAME.getId()).isEmpty();
-//    }
+
 }

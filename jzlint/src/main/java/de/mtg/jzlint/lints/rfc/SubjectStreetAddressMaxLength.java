@@ -9,6 +9,7 @@ import de.mtg.jzlint.JavaLint;
 import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
+import de.mtg.jzlint.utils.Utils;
 
 /************************************************
  ITU-T X.520 (02/2001) UpperBounds
@@ -28,14 +29,9 @@ public class SubjectStreetAddressMaxLength implements JavaLint {
         return SubjectOrganizationNameMaxLength.isSubjectComponentGreaterThan(certificate, BCStyle.STREET.getId(), 128);
     }
 
-    // TODO
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return true;
+        return !Utils.getSubjectDNNameComponent(certificate, BCStyle.STREET.getId()).isEmpty();
     }
-//    @Override
-//    public boolean checkApplies(X509Certificate certificate) {
-//        return !Util.getSubjectDNNameComponent(certificate, BCStyle.STREET.getId()).isEmpty();
-//    }
 
 }

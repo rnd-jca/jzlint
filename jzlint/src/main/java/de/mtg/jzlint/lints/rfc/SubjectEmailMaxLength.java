@@ -9,6 +9,7 @@ import de.mtg.jzlint.JavaLint;
 import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
+import de.mtg.jzlint.utils.Utils;
 
 
 /************************************************
@@ -35,13 +36,9 @@ public class SubjectEmailMaxLength implements JavaLint {
         return SubjectOrganizationNameMaxLength.isSubjectComponentGreaterThan(certificate, BCStyle.EmailAddress.getId(), 255);
     }
 
-    // TODO
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return true;
+        return !Utils.getSubjectDNNameComponent(certificate, BCStyle.EmailAddress.getId()).isEmpty();
     }
-//    @Override
-//    public boolean checkApplies(X509Certificate certificate) {
-//        return !Util.getSubjectDNNameComponent(certificate, BCStyle.EmailAddress.getId()).isEmpty();
-//    }
+
 }

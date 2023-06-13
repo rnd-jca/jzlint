@@ -9,6 +9,7 @@ import de.mtg.jzlint.JavaLint;
 import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
+import de.mtg.jzlint.utils.Utils;
 
 
 /************************************************
@@ -31,13 +32,9 @@ public class SubjectCommonNameMaxLength implements JavaLint {
         return SubjectOrganizationNameMaxLength.isSubjectComponentGreaterThan(certificate, X509ObjectIdentifiers.commonName.getId(), 64);
     }
 
-    // TODO
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return true;
+        return !Utils.getSubjectDNNameComponent(certificate, X509ObjectIdentifiers.commonName.getId()).isEmpty();
     }
-//    @Override
-//    public boolean checkApplies(X509Certificate certificate) {
-//        return !Util.getSubjectDNNameComponent(certificate, X509ObjectIdentifiers.commonName.getId()).isEmpty();
-//    }
+
 }

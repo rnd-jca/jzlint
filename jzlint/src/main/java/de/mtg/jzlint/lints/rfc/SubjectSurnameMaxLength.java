@@ -9,6 +9,7 @@ import de.mtg.jzlint.JavaLint;
 import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
+import de.mtg.jzlint.utils.Utils;
 
 /************************************************
  RFC 5280: A.1
@@ -44,15 +45,9 @@ public class SubjectSurnameMaxLength implements JavaLint {
         return SubjectOrganizationNameMaxLength.isSubjectComponentGreaterThan(certificate, BCStyle.SURNAME.getId(), 32768);
     }
 
-    // TODO
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return true;
+        return !Utils.getSubjectDNNameComponent(certificate, BCStyle.SURNAME.getId()).isEmpty();
     }
-//
-//    @Override
-//    public boolean checkApplies(X509Certificate certificate) {
-//        return !Util.getSubjectDNNameComponent(certificate, BCStyle.SURNAME.getId()).isEmpty();
-//    }
 
 }

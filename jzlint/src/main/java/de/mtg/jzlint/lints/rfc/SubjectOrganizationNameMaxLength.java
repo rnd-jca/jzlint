@@ -34,16 +34,10 @@ public class SubjectOrganizationNameMaxLength implements JavaLint {
         return SubjectOrganizationNameMaxLength.isSubjectComponentGreaterThan(certificate, X509ObjectIdentifiers.organization.getId(), 64);
     }
 
-    // TODO
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return true;
+        return !Utils.getSubjectDNNameComponent(certificate, X509ObjectIdentifiers.organization.getId()).isEmpty();
     }
-
-//    @Override
-//    public boolean checkApplies(X509Certificate certificate) {
-//        return !Util.getSubjectDNNameComponent(certificate, X509ObjectIdentifiers.organization.getId()).isEmpty();
-//    }
 
     protected static LintResult isSubjectComponentGreaterThan(X509Certificate certificate, String oid, int length) {
         List<AttributeTypeAndValue> subjectNameComponent = Utils.getSubjectDNNameComponent(certificate, oid);
