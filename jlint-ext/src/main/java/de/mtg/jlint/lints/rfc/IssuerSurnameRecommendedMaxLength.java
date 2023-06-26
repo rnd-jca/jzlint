@@ -1,18 +1,12 @@
-package de.mtg.jzlint.lints.rfc;
+package de.mtg.jlint.lints.rfc;
 
-import java.security.cert.X509Certificate;
-import java.util.List;
-
+import de.mtg.jzlint.*;
+import de.mtg.jzlint.utils.Utils;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 
-import de.mtg.jzlint.EffectiveDate;
-import de.mtg.jzlint.JavaLint;
-import de.mtg.jzlint.Lint;
-import de.mtg.jzlint.LintResult;
-import de.mtg.jzlint.Source;
-import de.mtg.jzlint.Status;
-import de.mtg.jzlint.utils.Utils;
+import java.security.cert.X509Certificate;
+import java.util.List;
 
 /************************************************
  RFC 5280: A.1
@@ -22,19 +16,19 @@ import de.mtg.jzlint.utils.Utils;
  ************************************************/
 
 @Lint(
-        name = "w_subject_surname_recommended_max_length",
+        name = "w_issuer_surname_recommended_max_length",
         description = "X.411 (1988) describes ub-common-name-length to be 64 bytes long. As systems may have targeted this length, for compatibility purposes it may be prudent to limit surnames to this length.",
         citation = "ITU-T Rec. X.411 (11/1988), Annex B Reference Definition of MTS Parameter Upper Bounds",
         source = Source.RFC5280,
         effectiveDate = EffectiveDate.RFC2459)
-public class SubjectSurnameRecommendedMaxLength implements JavaLint {
+public class IssuerSurnameRecommendedMaxLength implements JavaLint {
 
     @Override
     public LintResult execute(X509Certificate certificate) {
 
-        List<AttributeTypeAndValue> subjectNameComponent = Utils.getSubjectDNNameComponent(certificate, BCStyle.SURNAME.getId());
+        List<AttributeTypeAndValue> issuerNameComponent = Utils.getIssuerDNNameComponent(certificate, BCStyle.SURNAME.getId());
 
-        for (AttributeTypeAndValue attributeTypeAndValue : subjectNameComponent) {
+        for (AttributeTypeAndValue attributeTypeAndValue : issuerNameComponent) {
             if (attributeTypeAndValue.getValue().toString().length() > 64) {
                 return LintResult.of(Status.WARN);
             }
@@ -45,7 +39,7 @@ public class SubjectSurnameRecommendedMaxLength implements JavaLint {
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return !Utils.getSubjectDNNameComponent(certificate, BCStyle.SURNAME.getId()).isEmpty();
+        return !Utils.getIssuerDNNameComponent(certificate, BCStyle.SURNAME.getId()).isEmpty();
     }
 
 }
