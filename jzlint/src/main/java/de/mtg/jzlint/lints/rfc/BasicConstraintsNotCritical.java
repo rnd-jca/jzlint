@@ -35,7 +35,7 @@ public class BasicConstraintsNotCritical implements JavaLint {
         if (Utils.isBasicConstraintsExtensionCritical(certificate)) {
             return LintResult.of(Status.PASS);
         }
-        return LintResult.of(Status.ERROR);
+        return LintResult.of(Status.ERROR, "Basic Constraints extension is marked as non-critical");
     }
 
     @Override
