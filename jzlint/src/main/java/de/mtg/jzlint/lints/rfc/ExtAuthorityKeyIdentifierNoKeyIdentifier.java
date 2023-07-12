@@ -30,7 +30,7 @@ import de.mtg.jzlint.utils.Utils;
  ***********************************************************************/
 @Lint(
         name = "e_ext_authority_key_identifier_no_key_identifier",
-        description = "CAs must include keyIdentifer field of AKI in all non-self-issued certificates",
+        description = "CAs must include keyIdentifier field of AKI in all non-self-issued certificates",
         citation = "RFC 5280: 4.2.1.1",
         source = Source.RFC5280,
         effectiveDate = EffectiveDate.RFC2459)
@@ -38,7 +38,8 @@ public class ExtAuthorityKeyIdentifierNoKeyIdentifier implements JavaLint {
 
     @Override
     public LintResult execute(X509Certificate certificate) {
-        if (Utils.isSelfSigned(certificate)) {
+
+        if (Utils.isSelfSigned(certificate) && Utils.isCA(certificate)) {
             return LintResult.of(Status.PASS);
         }
 

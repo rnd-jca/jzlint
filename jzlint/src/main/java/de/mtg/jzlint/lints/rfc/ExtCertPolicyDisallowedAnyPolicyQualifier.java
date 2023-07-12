@@ -75,6 +75,20 @@ public class ExtCertPolicyDisallowedAnyPolicyQualifier implements JavaLint {
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return Utils.hasCertificatePoliciesExtension(certificate);
+
+        if (!Utils.hasCertificatePoliciesExtension(certificate)) {
+            return false;
+        }
+
+        byte[] rawCertificatePolicies = certificate.getExtensionValue(Extension.certificatePolicies.getId());
+
+        CertificatePolicies certificatePolicies = CertificatePolicies.getInstance(ASN1OctetString.getInstance(rawCertificatePolicies).getOctets());
+        for (PolicyInformation policyInformation : certificatePolicies.getPolicyInformation()) {
+            if (ANY_POLICY_OID.equals(policyInformation.getPolicyIdentifier().getId())) {
+                return true;
+            }
+        }
+        return false;
     }
+
 }

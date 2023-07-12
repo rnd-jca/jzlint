@@ -37,5 +37,12 @@ class EcdsaEeInvalidKuTest {
     void testCase04() {
     }
 
+    @LintTest(
+            name = "n_ecdsa_ee_invalid_ku",
+            filename = "CNWithoutSANSeptember2021.pem",
+            expectedResultStatus = Status.NA)
+    void testCase05() {
+    }
+
 }
 

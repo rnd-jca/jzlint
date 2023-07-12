@@ -22,4 +22,5 @@ class ExtAuthorityKeyIdentifierNoKeyIdentifierTest {
             expectedResultStatus = Status.PASS)
     void testCase02() {
     }
+
 }
