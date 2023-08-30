@@ -355,6 +355,22 @@ public class Utils {
         return getAllAttributeValuesInDN(subject, oid);
     }
 
+    public static List<String> getAllAttributeTypesInSubject(X509Certificate certificate) throws CertificateEncodingException {
+        ASN1Sequence subject = (ASN1Sequence) ASN1CertificateUtils.getSubject(certificate);
+
+        List<String> oids = new ArrayList<>();
+        Iterator<ASN1Encodable> iterator = subject.iterator();
+        while (iterator.hasNext()) {
+            ASN1Set rdn = (ASN1Set) iterator.next();
+            Iterator<ASN1Encodable> rdnIterator = rdn.iterator();
+            while (rdnIterator.hasNext()) {
+                ASN1Sequence attributeTypeAndValue = (ASN1Sequence) rdnIterator.next();
+                oids.add(((ASN1ObjectIdentifier) attributeTypeAndValue.getObjectAt(0)).getId());
+            }
+        }
+        return oids;
+    }
+
     private static List<String> getAllAttributeValuesInDN(ASN1Sequence rDNSequence, String oid) {
         List<String> values = new ArrayList<>();
         Iterator<ASN1Encodable> iterator = rDNSequence.iterator();
