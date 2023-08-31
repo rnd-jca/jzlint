@@ -19,6 +19,11 @@ public class CRLUtils {
         return crl.getExtensionValue(oid) != null;
     }
 
+    public static boolean containsRevokedCertificates(X509CRL crl) {
+        Set<? extends X509CRLEntry> revokedCertificates = crl.getRevokedCertificates();
+        return revokedCertificates != null && revokedCertificates.size() > 0;
+    }
+
     public static boolean hasExtensions(X509CRL crl) {
 
         try {

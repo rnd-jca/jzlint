@@ -53,6 +53,7 @@ public enum EffectiveDate {
     CABFBRs_1_7_9_Date(ZonedDateTime.of(2021, 8, 16, 0, 0, 0, 0, ZoneId.of("UTC"))),
     AppleReducedLifetimeDate(ZonedDateTime.of(2020, 9, 1, 0, 0, 0, 0, ZoneId.of("UTC"))),
     CABFBRs_1_8_0_Date(ZonedDateTime.of(2021, 8, 25, 0, 0, 0, 0, ZoneId.of("UTC"))),
+    CABFBRs_1_8_7_Date(ZonedDateTime.of(2023, 7, 15, 0, 0, 0, 0, ZoneId.of("UTC"))),
     NoReservedDomainLabelsDate(ZonedDateTime.of(2021, 10, 1, 0, 0, 0, 0, ZoneId.of("UTC"))),
     AppleCTPolicy_DURATION_CHANGE(ZonedDateTime.of(2021, 4, 21, 0, 0, 0, 0, ZoneId.of("UTC"))),
     CABFBRs_OU_Prohibited_Date(ZonedDateTime.of(2022, 9, 1, 0, 0, 0, 0, ZoneId.of("UTC"))),

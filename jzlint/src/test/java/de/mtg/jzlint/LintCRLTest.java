@@ -12,9 +12,14 @@ import org.junit.jupiter.api.Test;
 @Test
 public @interface LintCRLTest {
 
-    public String name();
-    public String filename();
-    public Status expectedResultStatus();
-    public String expectedResultDetails() default "";
-    public String certificateDescription() default "";
+    String name();
+
+    String filename();
+
+    Status expectedResultStatus();
+
+    String expectedResultDetails() default "";
+
+    String crlDescription() default "";
+
 }
