@@ -10,10 +10,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 public class PublicSuffixHTTP {
 
+    /**
+     * @param args first argument proxy (optional), second argument proxy port (optional).
+     *
+     * @throws IOException if writing on the filesystem is not possible.
+     */
     public static void main(String[] args) throws IOException {
 
         final String url = "https://publicsuffix.org/list/public_suffix_list.dat";
-        final RestTemplate restTemplate = new RestTemplate();
+        final RestTemplate restTemplate = GTLDHttp.getRestTemplate(args);
         final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         final ResponseEntity<byte[]> publicSuffixResponse = restTemplate.getForEntity(builder.toUriString(), byte[].class);
 

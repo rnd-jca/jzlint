@@ -1,6 +1,8 @@
 package de.mtg.jzlint.domains;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,11 +12,17 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class GTLDHttp {
 
+    /**
+     * @param args first argument proxy (optional), second argument proxy port (optional).
+     *
+     * @throws IOException if writing on the filesystem is not possible.
+     */
     public static void main(String[] args) throws IOException {
 
         List<GTLD> firstGTLDs;
@@ -22,7 +30,7 @@ public class GTLDHttp {
 
         {
             final String url = "https://www.icann.org/resources/registries/gtlds/v2/gtlds.json";
-            RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = getRestTemplate(args);
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
             ResponseEntity<GTLDResponse> gtldResponse = restTemplate.getForEntity(builder.toUriString(), GTLDResponse.class);
             firstGTLDs = gtldResponse.getBody().getgTLDs();
@@ -34,7 +42,7 @@ public class GTLDHttp {
 
         {
             final String uri = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt";
-            RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = getRestTemplate(args);
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(uri);
             ResponseEntity<String> response = restTemplate.getForEntity(builder.toUriString(), String.class);
 
@@ -99,6 +107,20 @@ public class GTLDHttp {
         }
 
         return stringBuilder.toString().getBytes(Charset.forName("UTF-8"));
+    }
+
+    protected static RestTemplate getRestTemplate(String[] args) {
+
+        if (args == null || args.length == 0 || args[0] == null || args[1] == null) {
+            return new RestTemplate();
+        }
+
+        String proxyHost = args[0];
+        int proxyPort = Integer.parseInt(args[1]);
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setProxy(proxy);
+        return new RestTemplate(requestFactory);
     }
 
 }
