@@ -7,6 +7,7 @@ import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x509.X509ObjectIdentifiers;
 
 import de.mtg.jzlint.EffectiveDate;
+import de.mtg.jzlint.IneffectiveDate;
 import de.mtg.jzlint.JavaLint;
 import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
@@ -24,7 +25,8 @@ import de.mtg.jzlint.utils.Utils;
         description = "Subscriber Certificate: commonName is deprecated.",
         citation = "BRs: 7.1.4.2.2",
         source = Source.CABF_BASELINE_REQUIREMENTS,
-        effectiveDate = EffectiveDate.CABEffectiveDate)
+        effectiveDate = EffectiveDate.CABEffectiveDate,
+        ineffectiveDate = IneffectiveDate.SC62_EFFECTIVE_DATE)
 public class SubjectCommonNameIncluded implements JavaLint {
 
     @Override
@@ -41,6 +43,5 @@ public class SubjectCommonNameIncluded implements JavaLint {
     public boolean checkApplies(X509Certificate certificate) {
         return !Utils.isCA(certificate);
     }
-
 
 }

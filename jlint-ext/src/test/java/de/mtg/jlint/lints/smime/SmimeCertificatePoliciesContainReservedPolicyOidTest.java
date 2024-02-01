@@ -66,8 +66,6 @@ class SmimeCertificatePoliciesContainReservedPolicyOidTest {
     void notApplicableTest() throws Exception {
         X509Certificate certificate = caExtension.getCaCertificate();
         caExtension.assertLintResult(LintResult.of(Status.NA), new SmimeCertificatePoliciesContainReservedPolicyOid(), certificate);
-        certificate = caExtension.createSMimeEECertificate();
-        caExtension.assertLintResult(LintResult.of(Status.NA), new SmimeCertificatePoliciesContainReservedPolicyOid(), certificate);
         certificate = createTestCertificate(caExtension.getCaPublicKey(), caExtension.getCaPrivateKey(), caExtension.getIsserDN(), null);
         caExtension.assertLintResult(LintResult.of(Status.NA), new SmimeCertificatePoliciesContainReservedPolicyOid(), certificate);
     }

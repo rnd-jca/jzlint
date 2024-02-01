@@ -83,9 +83,7 @@ public class MailboxValidatedEnforceSubjectFieldRestrictions implements JavaLint
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-
-        return SMIMEUtils.isMailboxValidatedCertificate(certificate);
-        //        return SMIMEUtils.isMailboxValidatedCertificate(certificate) && Utils.isSubscriberCert(certificate);
+        return SMIMEUtils.isMailboxValidatedCertificate(certificate) && Utils.isSubscriberCert(certificate);
     }
 
 }

@@ -61,7 +61,8 @@ public enum EffectiveDate {
     SMIME_BR_1_0_DATE(ZonedDateTime.of(2023, 9, 1, 0, 0, 0, 0, ZoneId.of("UTC"))),
     CS_BR_3_2_DATE(ZonedDateTime.of(2022, 10, 28, 0, 0, 0, 0, ZoneId.of("UTC"))),
     OCSP_SHA1_SUNSET(ZonedDateTime.of(2022, 3, 4, 0, 0, 0, 0, ZoneId.of("UTC"))),
-    CRL_REASON_CODE_UPDATE(ZonedDateTime.of(2020, 9, 30, 0, 0, 0, 0, ZoneId.of("UTC")));
+    CRL_REASON_CODE_UPDATE(ZonedDateTime.of(2020, 9, 30, 0, 0, 0, 0, ZoneId.of("UTC"))),
+    SC62_EFFECTIVE_DATE(ZonedDateTime.of(2023, 9, 15, 0, 0, 0, 0, ZoneId.of("UTC")));
 
     private final ZonedDateTime zonedDateTime;
 

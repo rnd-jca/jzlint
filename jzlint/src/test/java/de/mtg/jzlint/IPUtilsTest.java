@@ -46,5 +46,16 @@ class IPUtilsTest {
         assertEquals(Boolean.parseBoolean(expected), IPUtils.isReservedIP(ip));
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "172.16.0.0,true",
+            "192.52.193.255,true",
+            "abc,false",
+            "a.b.c.d,false",
+            "2001:db8:2001:2001:2001:2001:2001:2001,true",
+    })
+    void testIsIP(String ip, String expected) {
+        assertEquals(Boolean.parseBoolean(expected), IPUtils.isIP(ip));
+    }
 
 }

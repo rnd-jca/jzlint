@@ -1,12 +1,18 @@
 package de.mtg.jlint.lints.smime;
 
-import de.mtg.jzlint.*;
-import de.mtg.jzlint.utils.Utils;
+import java.security.cert.X509Certificate;
+
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.Extension;
 
-import java.security.cert.X509Certificate;
+import de.mtg.jzlint.EffectiveDate;
+import de.mtg.jzlint.JavaLint;
+import de.mtg.jzlint.Lint;
+import de.mtg.jzlint.LintResult;
+import de.mtg.jzlint.Source;
+import de.mtg.jzlint.Status;
+import de.mtg.jzlint.utils.Utils;
 
 /**
  * 7.1.2.3 Subscriber certificates

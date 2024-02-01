@@ -2,6 +2,7 @@ package de.mtg.jzlint.lints.cabf_smime_br;
 
 import java.security.cert.X509Certificate;
 
+import de.mtg.jzlint.utils.SMIMEUtils;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.DistributionPoint;
@@ -54,7 +55,7 @@ public class SubscribersShallHaveCrlDistributionPoints implements JavaLint {
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return Utils.isSubscriberCert(certificate);
+        return Utils.isSubscriberCert(certificate) && SMIMEUtils.isSMIMEBRCertificate(certificate);
     }
 
 }

@@ -41,5 +41,24 @@ class DomainStringUtilsTest {
         assertEquals(Boolean.parseBoolean(expectedResult), DomainStringUtils.domainMatches(domain, rule));
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "'',false",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,false",
+            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,true",
+            "9,true",
+            "9a,true",
+            "a9,true",
+            "a,true",
+            ".,false",
+            "a-b,true",
+            "-a,false",
+            "a-,false",
+            "-,false",
+            "%,false",
+    })
+    void testIsLDHLabel(String label, String expectedResult) {
+        assertEquals(Boolean.parseBoolean(expectedResult), DomainStringUtils.isLDHLabel(label));
+    }
 
 }

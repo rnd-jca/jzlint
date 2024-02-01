@@ -64,8 +64,6 @@ class SmimeCertificatePoliciesExtensionCriticalTest {
     void notApplicableTest() throws Exception {
         X509Certificate certificate = caExtension.getCaCertificate();
         caExtension.assertLintResult(LintResult.of(Status.NA), new SmimeCertificatePoliciesExtensionCritical(), certificate);
-        certificate = caExtension.createSMimeEECertificate();
-        caExtension.assertLintResult(LintResult.of(Status.NA), new SmimeCertificatePoliciesExtensionCritical(), certificate);
     }
 
     private X509Certificate createTestCertificate(PublicKey caPublicKey, PrivateKey caPrivateKey, X500Name caIssuerDN, boolean critical) throws NoSuchAlgorithmException, IOException, OperatorCreationException, CertificateException, NoSuchProviderException {

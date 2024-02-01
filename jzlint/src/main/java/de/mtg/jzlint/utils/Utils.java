@@ -33,6 +33,7 @@ import org.bouncycastle.asn1.ASN1Set;
 import org.bouncycastle.asn1.ASN1UTF8String;
 import org.bouncycastle.asn1.ASN1VisibleString;
 import org.bouncycastle.asn1.DERIA5String;
+import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x509.AccessDescription;
@@ -56,6 +57,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 public class Utils {
 
     public static final BigDecimal TWO = new BigDecimal("2");
+    public static final String ADOBE_TIMESTAMP_OID = "1.2.840.113583.1.1.9.1";
+    public static final String ADOBE_ARCHIVE_REV_INFO_OID = "1.2.840.113583.1.1.9.2";
 
     private Utils() {
         // empty
@@ -105,7 +108,8 @@ public class Utils {
             return true;
         }
 
-        BasicConstraints basicConstraints = BasicConstraints.getInstance(ASN1OctetString.getInstance(rawBasicConstraints).getOctets());
+        byte[] value = ASN1OctetString.getInstance(rawBasicConstraints).getOctets();
+        BasicConstraints basicConstraints = BasicConstraints.getInstance(value);
         return !basicConstraints.isCA();
     }
 
@@ -117,7 +121,8 @@ public class Utils {
             return true;
         }
 
-        ExtendedKeyUsage extendedKeyUsage = ExtendedKeyUsage.getInstance(ASN1OctetString.getInstance(rawExtendedKeyUsage).getOctets());
+        byte[] value = ASN1OctetString.getInstance(rawExtendedKeyUsage).getOctets();
+        ExtendedKeyUsage extendedKeyUsage = ExtendedKeyUsage.getInstance(value);
         return (extendedKeyUsage.hasKeyPurposeId(KeyPurposeId.anyExtendedKeyUsage) ||
                 extendedKeyUsage.hasKeyPurposeId(KeyPurposeId.id_kp_serverAuth));
     }
@@ -130,7 +135,8 @@ public class Utils {
             return false;
         }
 
-        ExtendedKeyUsage extendedKeyUsage = ExtendedKeyUsage.getInstance(ASN1OctetString.getInstance(rawExtendedKeyUsage).getOctets());
+        byte[] value = ASN1OctetString.getInstance(rawExtendedKeyUsage).getOctets();
+        ExtendedKeyUsage extendedKeyUsage = ExtendedKeyUsage.getInstance(value);
         return extendedKeyUsage.hasKeyPurposeId(KeyPurposeId.id_kp_OCSPSigning);
     }
 
@@ -234,6 +240,11 @@ public class Utils {
 
     public static boolean isPublicKeyECC(X509Certificate certificate) {
         return publicKeyHasOID(certificate, X9ObjectIdentifiers.id_ecPublicKey.getId());
+    }
+
+    public static boolean isPublicKeyEdDSA(X509Certificate certificate) {
+        return publicKeyHasOID(certificate, EdECObjectIdentifiers.id_Ed448.getId()) ||
+                publicKeyHasOID(certificate, EdECObjectIdentifiers.id_Ed25519.getId());
     }
 
     public static boolean isPublicKeyRSA(X509Certificate certificate) {
@@ -694,12 +705,15 @@ public class Utils {
         return counter;
     }
 
+    public static boolean hasAdobeX509Extensions(X509Certificate certificate) {
+        return hasExtension(certificate, ADOBE_TIMESTAMP_OID) || hasExtension(certificate, ADOBE_ARCHIVE_REV_INFO_OID);
+    }
+
     /**
      * Square root for BigInteger is implemented in Java 9. To keep compatibility to Java 8 a very simple implementation
      * is provided.
      *
      * @param number
-     *
      * @return
      */
     public static BigInteger calculateSquareRoot(BigInteger number) {

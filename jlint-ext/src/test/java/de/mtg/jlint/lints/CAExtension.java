@@ -18,18 +18,25 @@ import java.security.cert.X509Certificate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Random;
 
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1Integer;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.AuthorityKeyIdentifier;
 import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.CertificatePolicies;
 import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
 import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
+import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.asn1.x509.SubjectKeyIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.cert.X509CRLHolder;
@@ -148,11 +155,12 @@ public class CAExtension implements BeforeAllCallback {
         ExtendedKeyUsage extendedKeyUsage = new ExtendedKeyUsage(KeyPurposeId.id_kp_emailProtection);
 
         Extension eku = new Extension(Extension.extendedKeyUsage, false, extendedKeyUsage.toASN1Primitive().getEncoded(ASN1Encoding.DER));
-
+        Optional<Extension> certificatePolicies = getCertificatePolicies(Arrays.asList("2.23.140.1.5.1.3"));
         X509v3CertificateBuilder certificateBuilder = new X509v3CertificateBuilder(caIssuerDN, serialNumber, notBeforeDate, noteAfterDate, subjectDN, subjectPublicKeyInfo);
         certificateBuilder.addExtension(akie);
         certificateBuilder.addExtension(skie);
         certificateBuilder.addExtension(eku);
+        certificateBuilder.addExtension(certificatePolicies.get());
         ContentSigner contentSigner = new JcaContentSignerBuilder(SHA_256_WITH_RSA_ENCRYPTION).setProvider(BouncyCastleProvider.PROVIDER_NAME).build(caPrivateKey);
         X509CertificateHolder x509CertificateHolder = certificateBuilder.build(contentSigner);
 
@@ -301,6 +309,25 @@ public class CAExtension implements BeforeAllCallback {
         if (expectedMessage != null && !expectedMessage.isEmpty()) {
             assertEquals(expectedMessage, lint.execute(crl).getDetails());
         }
+    }
+
+    private static Optional<Extension> getCertificatePolicies(List<String> oids) throws IOException {
+
+        if (oids == null || oids.isEmpty()) {
+            return Optional.empty();
+        }
+
+        PolicyInformation[] policies = new PolicyInformation[oids.size()];
+        List<PolicyInformation> policiesList = new ArrayList<>();
+
+        for (String oid : oids) {
+            PolicyInformation policyInformation = new PolicyInformation(new ASN1ObjectIdentifier(oid));
+            policiesList.add(policyInformation);
+        }
+
+        CertificatePolicies cps = new CertificatePolicies(policiesList.toArray(policies));
+        return Optional.of(new Extension(Extension.certificatePolicies, false, cps.toASN1Primitive().getEncoded(ASN1Encoding.DER)));
+
     }
 
 }

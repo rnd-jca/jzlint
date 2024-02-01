@@ -29,4 +29,5 @@ class ExtSanUriFormatInvalidTest {
             expectedResultStatus = Status.ERROR)
     void testCase03() {
     }
+
 }

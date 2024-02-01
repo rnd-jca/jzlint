@@ -32,4 +32,5 @@ class UnderscoreNotPermissibleInDnsnameTest {
             certificateDescription = "Not effective")
     void testCase03() {
     }
+
 }

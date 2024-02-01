@@ -1,12 +1,18 @@
 package de.mtg.jlint.lints.rfc;
 
-import de.mtg.jzlint.*;
-import de.mtg.jzlint.utils.Utils;
+import java.security.cert.X509Certificate;
+import java.util.List;
+
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 
-import java.security.cert.X509Certificate;
-import java.util.List;
+import de.mtg.jzlint.EffectiveDate;
+import de.mtg.jzlint.JavaLint;
+import de.mtg.jzlint.Lint;
+import de.mtg.jzlint.LintResult;
+import de.mtg.jzlint.Source;
+import de.mtg.jzlint.Status;
+import de.mtg.jzlint.utils.Utils;
 
 /************************************************
  RFC 5280: A.1

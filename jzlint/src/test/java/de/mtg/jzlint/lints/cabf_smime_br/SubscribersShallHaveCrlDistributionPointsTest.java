@@ -25,4 +25,13 @@ class SubscribersShallHaveCrlDistributionPointsTest {
     void testCase02() {
     }
 
+    @LintTest(
+            name = "e_subscribers_shall_have_crl_distribution_points",
+            filename = "smime/with_subject_alternative_name_no_br.pem",
+            expectedResultStatus = Status.NA,
+            certificateDescription = "na - certificate has no SMIME BR policy")
+    void testCase03() {
+    }
+
+
 }

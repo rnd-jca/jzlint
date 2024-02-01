@@ -1,5 +1,7 @@
 package de.mtg.jzlint.utils;
 
+import inet.ipaddr.HostName;
+import inet.ipaddr.HostNameException;
 import inet.ipaddr.IPAddressString;
 
 public final class IPUtils {
@@ -106,5 +108,14 @@ public final class IPUtils {
         return false;
     }
 
+    public static boolean isIP(String address) {
+        HostName hostname = new HostName(address);
+        try {
+            hostname.validate();
+            return hostname.isAddress();
+        } catch(HostNameException e) {
+            return false;
+        }
+    }
 
 }

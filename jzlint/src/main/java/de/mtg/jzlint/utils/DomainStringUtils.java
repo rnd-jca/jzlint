@@ -4,8 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class DomainStringUtils {
+
+    private static final Pattern NONLDHCHARACTER_REGEX = Pattern.compile("[^a-zA-Z0-9\\-]");
+    private static final Pattern RESERVED_LABEL_PREFIX_REGEX = Pattern.compile("^..--.*");
+    private static final String XN_PREFIX = "xn--";
+
+    Pattern pattern = Pattern.compile("^..--.*");
 
     private DomainStringUtils() {
         // empty
@@ -67,5 +75,29 @@ public final class DomainStringUtils {
         Collections.reverse(result);
         return result;
     }
+
+    public static boolean isLDHLabel(String label) {
+
+        if (label == null || label.length() == 0 || label.length() > 63) {
+            return false;
+        }
+
+        Matcher matcher = NONLDHCHARACTER_REGEX.matcher(label);
+        if (matcher.matches()) {
+            return false;
+        }
+
+        if (label.startsWith("-") || label.endsWith("-")) {
+            return false;
+        }
+
+        Matcher reservedLabelMatcher = RESERVED_LABEL_PREFIX_REGEX.matcher(label);
+        if (reservedLabelMatcher.matches() && !label.toLowerCase().startsWith(XN_PREFIX)) {
+            return false;
+        }
+
+        return true;
+    }
+
 
 }
