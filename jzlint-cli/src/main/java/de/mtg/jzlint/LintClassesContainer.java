@@ -15,8 +15,6 @@ import java.util.function.Predicate;
 import java.util.jar.JarEntry;
 import java.util.stream.Collectors;
 
-import sun.net.www.protocol.file.FileURLConnection;
-
 public class LintClassesContainer {
 
     public static final String JZLINT_PACKAGE_NAME = "de/mtg/jzlint/lints";
@@ -75,7 +73,7 @@ public class LintClassesContainer {
                     classes.add(Class.forName(className.substring(0, className.length() - 6)));
                 }
             }
-        } else if (urlConnection instanceof FileURLConnection) {
+        } else {
 
             Enumeration<URL> resources = classLoader.getResources(packageName);
             List<Path> lintClassesCandidates = new ArrayList<>();
