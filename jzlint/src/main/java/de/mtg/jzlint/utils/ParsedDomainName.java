@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.IDN;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +50,7 @@ public final class ParsedDomainName {
             throw new RuntimeException(e);
         }
 
-        String publicSuffixList = new String(file);
+        String publicSuffixList = new String(file, StandardCharsets.UTF_8);
 
         List<Map<String, Boolean>> matchingRules = new ArrayList<>();
         boolean isPublicRule = true;
