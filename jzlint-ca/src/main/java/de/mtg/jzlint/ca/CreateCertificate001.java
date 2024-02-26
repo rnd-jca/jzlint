@@ -34,7 +34,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
-public class CreateCertificate {
+public class CreateCertificate001 {
 
     public static final String SHA_256_WITH_ECDSA = "SHA256WithECDSA";
 
