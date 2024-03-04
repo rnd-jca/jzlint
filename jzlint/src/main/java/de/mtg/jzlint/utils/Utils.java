@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -661,9 +662,11 @@ public class Utils {
             return false;
         }
 
-        CertificatePolicies certificatePolicies = CertificatePolicies.getInstance(ASN1OctetString.getInstance(rawCertificatePolicies).getOctets());
+        ASN1OctetString asn1OctetString = ASN1OctetString.getInstance(rawCertificatePolicies);
+        CertificatePolicies certificatePolicies = CertificatePolicies.getInstance(asn1OctetString.getOctets());
 
-        return Arrays.stream(certificatePolicies.getPolicyInformation()).anyMatch(p -> oid.equals(p.getPolicyIdentifier().getId()));
+        Predicate<PolicyInformation> policyEquals = p -> oid.equals(p.getPolicyIdentifier().getId());
+        return Arrays.stream(certificatePolicies.getPolicyInformation()).anyMatch(policyEquals);
     }
 
     public static boolean isIPAddress(String value) {

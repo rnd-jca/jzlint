@@ -9,7 +9,7 @@ import java.util.Set;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 
-public class CRLUtils {
+public final class CRLUtils {
 
     private CRLUtils() {
         // empty

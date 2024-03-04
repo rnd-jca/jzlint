@@ -12,7 +12,7 @@ import org.bouncycastle.asn1.ocsp.ResponseData;
 import org.bouncycastle.asn1.ocsp.SingleResponse;
 import org.bouncycastle.asn1.x509.Extensions;
 
-public class OCSPUtils {
+public final class OCSPUtils {
 
     private OCSPUtils() {
         // empty

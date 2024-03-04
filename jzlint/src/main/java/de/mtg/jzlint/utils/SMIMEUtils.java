@@ -11,7 +11,7 @@ import org.bouncycastle.asn1.x509.CertificatePolicies;
 import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.PolicyInformation;
 
-public class SMIMEUtils {
+public final class SMIMEUtils {
 
     public static final String MAILBOX_VALIDATED_LEGACY = "2.23.140.1.5.1.1";
     public static final String MAILBOX_VALIDATED_MULTIPURPOSE = "2.23.140.1.5.1.2";
