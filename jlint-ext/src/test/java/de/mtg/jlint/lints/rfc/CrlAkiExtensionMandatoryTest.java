@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import de.mtg.jlint.lints.CAExtension;
-import de.mtg.jlint.lints.rfc.CrlAkiExtensionMandatory;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Status;
 

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import de.mtg.jlintocsp.CAExtension;
-import de.mtg.jlintocsp.lints.rfc.OcspLintCorrectResponseStatus;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Status;
 

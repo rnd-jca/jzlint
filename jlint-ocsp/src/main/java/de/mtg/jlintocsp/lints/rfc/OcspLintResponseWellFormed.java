@@ -1,11 +1,8 @@
 package de.mtg.jlintocsp.lints.rfc;
 
-import java.math.BigInteger;
-
 import org.bouncycastle.asn1.ocsp.BasicOCSPResponse;
 import org.bouncycastle.asn1.ocsp.OCSPResponse;
 import org.bouncycastle.asn1.ocsp.ResponseBytes;
-import org.bouncycastle.asn1.ocsp.ResponseData;
 
 import de.mtg.jlintocsp.JavaOCSPResponseLint;
 import de.mtg.jzlint.EffectiveDate;

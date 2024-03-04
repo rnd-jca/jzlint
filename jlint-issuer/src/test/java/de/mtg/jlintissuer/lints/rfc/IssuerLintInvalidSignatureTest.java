@@ -34,7 +34,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import de.mtg.jlintissuer.CAExtension;
-import de.mtg.jlintissuer.lints.rfc.IssuerLintKeyIdentifierMismatch;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Status;
 

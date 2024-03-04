@@ -170,6 +170,10 @@ public class Utils {
         return getGeneralNameAsString(certificate, 1);
     }
 
+    public static List<String> getDirNames(X509Certificate certificate) throws IOException {
+        return getGeneralNameAsString(certificate, 4);
+    }
+
     public static List<String> getIpAddresses(X509Certificate certificate) throws IOException {
 
         IPAddressNetwork.IPAddressGenerator generator = new IPAddressNetwork.IPAddressGenerator();

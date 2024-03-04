@@ -1,8 +1,6 @@
 package de.mtg.jlintocsp.lints.rfc;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -38,7 +36,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import de.mtg.jlintocsp.CAExtension;
-import de.mtg.jlintocsp.lints.rfc.OcspLintCorrectVersion;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Status;
 

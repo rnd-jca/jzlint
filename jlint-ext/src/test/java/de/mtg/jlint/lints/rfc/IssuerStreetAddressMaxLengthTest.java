@@ -1,12 +1,13 @@
 package de.mtg.jlint.lints.rfc;
 
-import de.mtg.jlint.lints.CAExtension;
-import de.mtg.jzlint.LintResult;
-import de.mtg.jzlint.Status;
+import java.security.cert.X509Certificate;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import java.security.cert.X509Certificate;
+import de.mtg.jlint.lints.CAExtension;
+import de.mtg.jzlint.LintResult;
+import de.mtg.jzlint.Status;
 
 class IssuerStreetAddressMaxLengthTest {
 

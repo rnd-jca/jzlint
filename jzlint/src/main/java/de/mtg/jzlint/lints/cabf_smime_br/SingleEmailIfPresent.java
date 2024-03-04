@@ -26,16 +26,18 @@ public class SingleEmailIfPresent implements JavaLint {
 
         try {
             List<String> emails = Utils.getEmails(certificate);
-            int size = emails.size();
-            if (size != 1) {
-                return LintResult.of(Status.ERROR,
-                        String.format("subject:emailAddress was present and contained %d names (%s)", size, emails));
+
+            for (String email : emails) {
+                if (!SMIMEUtils.isValidEmailAddress(email)) {
+                    return LintResult.of(Status.ERROR, String.format("subject:emailAddress was present and contained an invalid email address (%s)", email));
+                }
             }
             return LintResult.of(Status.PASS);
         } catch (IOException ex) {
             return LintResult.of(Status.FATAL);
         }
     }
+
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {

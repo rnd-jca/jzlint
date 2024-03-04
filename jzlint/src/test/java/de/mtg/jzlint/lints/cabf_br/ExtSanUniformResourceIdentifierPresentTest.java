@@ -29,4 +29,5 @@ class ExtSanUniformResourceIdentifierPresentTest {
             expectedResultStatus = Status.ERROR)
     void testCase03() {
     }
+
 }

@@ -30,6 +30,8 @@ import de.mtg.jzlint.utils.Utils;
 public class RegistrationSchemeIdMatchesSubjectCountry implements JavaLint {
 
     private static final String COUNTRY_REGEX = "^([A-Z]{3})([A-Z]{2})";
+    public static final String INT = "INT";
+    public static final String LEI = "LEI";
 
     @Override
     public LintResult execute(X509Certificate certificate) {
@@ -71,6 +73,8 @@ public class RegistrationSchemeIdMatchesSubjectCountry implements JavaLint {
                 return false;
             }
 
+            boolean orgIDsAreInternational = true;
+
             List<String> organizationIdentifierValues = Utils.getAllAttributeValuesInSubject(certificate, BCStyle.ORGANIZATION_IDENTIFIER.getId());
 
             if (organizationIdentifierValues == null || organizationIdentifierValues.isEmpty()) {
@@ -90,10 +94,18 @@ public class RegistrationSchemeIdMatchesSubjectCountry implements JavaLint {
                     return false;
                 }
 
+                orgIDsAreInternational = orgIDsAreInternational && (INT.equals(matcher.group(1)) || LEI.equals(matcher.group(1)));
+
             }
+
+            if (orgIDsAreInternational) {
+                return false;
+            }
+
         } catch (CertificateEncodingException ex) {
             throw new RuntimeException(ex);
         }
+
 
         return SMIMEUtils.isOrganizationValidatedCertificate(certificate) || SMIMEUtils.isSponsorValidatedCertificate(certificate);
     }
@@ -103,6 +115,10 @@ public class RegistrationSchemeIdMatchesSubjectCountry implements JavaLint {
         Matcher matcher = pattern.matcher(organizationIdentifier);
         matcher.find();
         String identifierCountry = matcher.group(2);
+
+        if (INT.equals(matcher.group(1)) || LEI.equals(matcher.group(1))) {
+            return null;
+        }
 
         if (!country.equals(identifierCountry)) {
             return "the country code used in the Registration Scheme identifier SHALL match that of the subject:countryName";

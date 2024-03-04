@@ -1,14 +1,24 @@
 package de.mtg.jzlint.utils;
 
+import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
+import org.bouncycastle.asn1.ASN1Encoding;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1OctetString;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.asn1.ASN1UTF8String;
 import org.bouncycastle.asn1.x509.CertificatePolicies;
 import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.GeneralName;
+import org.bouncycastle.asn1.x509.GeneralNames;
 import org.bouncycastle.asn1.x509.PolicyInformation;
 
 public final class SMIMEUtils {
@@ -67,6 +77,12 @@ public final class SMIMEUtils {
     );
 
     private static final Function<PolicyInformation, String> getOID = p -> p.getPolicyIdentifier().getId();
+
+    // taken from https://www.baeldung.com/java-email-validation-regex
+    private static final String REGEX_PATTERN = "^(?=.{1,64}@)[\\p{L}0-9_-]+(\\.[\\p{L}0-9_-]+)*@[^-][\\p{L}0-9-]+(\\.[\\p{L}0-9-]+)*(\\.[\\p{L}]{2,})$";
+    private static final String REGEX_PATTERN_PLUS = "^(?=.{1,64}@)[A-Za-z0-9\\+_-]+(\\.[A-Za-z0-9\\+_-]+)*@[^-][A-Za-z0-9\\+-]+(\\.[A-Za-z0-9\\+-]+)*(\\.[A-Za-z]{2,})$";
+    private static final Pattern PATTERN = Pattern.compile(REGEX_PATTERN);
+    private static final Pattern PATTERN_PLUS = Pattern.compile(REGEX_PATTERN_PLUS);
 
     private SMIMEUtils() {
         // empty
@@ -164,6 +180,42 @@ public final class SMIMEUtils {
         CertificatePolicies certificatePolicies = CertificatePolicies.getInstance(value);
         Predicate<PolicyInformation> isSponsorValidatedPolicy = p -> SPONSOR_VALIDATED_OIDS.contains(getOID.apply(p));
         return Arrays.stream(certificatePolicies.getPolicyInformation()).anyMatch(isSponsorValidatedPolicy);
+    }
+
+    public static boolean isValidEmailAddress(String candidate) {
+        if (!PATTERN.matcher(candidate).matches()) {
+            if (!PATTERN_PLUS.matcher(candidate).matches()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static List<String> getSmtpUTF8Mailboxes(X509Certificate certificate) throws IOException {
+
+        byte[] rawSAN = certificate.getExtensionValue(Extension.subjectAlternativeName.getId());
+
+        if (rawSAN == null) {
+            return new ArrayList<>();
+        }
+
+        GeneralNames generalNames = Utils.getGeneralNames(rawSAN);
+        GeneralName[] names = generalNames.getNames();
+        List<GeneralName> otherNames = new ArrayList<>();
+        Arrays.stream(names).filter(generalName -> generalName.getTagNo() == 0).forEach(otherNames::add);
+
+        List<String> emails = new ArrayList<>();
+        for (GeneralName otherName : otherNames) {
+            byte[] encoded = otherName.getEncoded(ASN1Encoding.DER);
+            ASN1Sequence sequence = ASN1Sequence.getInstance(ASN1TaggedObject.getInstance(encoded).getBaseObject());
+            ASN1ObjectIdentifier typeId = (ASN1ObjectIdentifier) sequence.getObjectAt(0);
+            if ("1.3.6.1.5.5.7.8.9".equals(typeId.getId())) {
+                ASN1TaggedObject taggedObject = (ASN1TaggedObject) sequence.getObjectAt(1);
+                ASN1UTF8String utf8String = (ASN1UTF8String) taggedObject.getBaseObject();
+                emails.add(utf8String.getString());
+            }
+        }
+        return emails;
     }
 
 }

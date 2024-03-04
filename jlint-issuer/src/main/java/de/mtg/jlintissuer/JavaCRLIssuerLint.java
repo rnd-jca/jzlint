@@ -1,9 +1,9 @@
 package de.mtg.jlintissuer;
 
-import de.mtg.jzlint.LintResult;
-
 import java.security.cert.X509CRL;
 import java.security.cert.X509Certificate;
+
+import de.mtg.jzlint.LintResult;
 
 public interface JavaCRLIssuerLint {
 
