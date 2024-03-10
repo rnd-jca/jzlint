@@ -1,16 +1,19 @@
 package de.mtg.jlint.lints.cabf_br;
 
-import de.mtg.jzlint.*;
-import de.mtg.jzlint.utils.Utils;
+import java.security.cert.X509Certificate;
+import java.util.Iterator;
+
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1Set;
-import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import de.mtg.jzlint.EffectiveDate;
+import de.mtg.jzlint.JavaLint;
+import de.mtg.jzlint.Lint;
+import de.mtg.jzlint.LintResult;
+import de.mtg.jzlint.Source;
+import de.mtg.jzlint.Status;
+import de.mtg.jzlint.utils.Utils;
 
 /**
  * When encoding a Name, the CA SHALL ensure that:

@@ -2,7 +2,6 @@ package de.mtg.jlint.lints.smime;
 
 import java.security.cert.X509Certificate;
 
-import de.mtg.jzlint.utils.SMIMEUtils;
 import org.bouncycastle.asn1.ASN1BMPString;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1IA5String;
@@ -22,6 +21,7 @@ import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
 import de.mtg.jzlint.Status;
+import de.mtg.jzlint.utils.SMIMEUtils;
 import de.mtg.jzlint.utils.Utils;
 
 /**

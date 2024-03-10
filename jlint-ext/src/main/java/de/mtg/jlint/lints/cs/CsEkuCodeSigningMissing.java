@@ -13,7 +13,6 @@ import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
 import de.mtg.jzlint.Status;
-import de.mtg.jzlint.utils.Utils;
 
 /**
  * extKeyUsage

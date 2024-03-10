@@ -4,7 +4,6 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.List;
 
-import de.mtg.jzlint.utils.SMIMEUtils;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.x509.CertificatePolicies;
 import org.bouncycastle.asn1.x509.Extension;
@@ -16,6 +15,7 @@ import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
 import de.mtg.jzlint.Status;
+import de.mtg.jzlint.utils.SMIMEUtils;
 import de.mtg.jzlint.utils.Utils;
 
 /**
