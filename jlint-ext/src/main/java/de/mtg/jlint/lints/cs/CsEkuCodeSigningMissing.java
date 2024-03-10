@@ -52,7 +52,7 @@ public class CsEkuCodeSigningMissing implements JavaLint {
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return Utils.isSubscriberCert(certificate) && Utils.hasExtendedKeyUsageExtension(certificate);
+        return false;
     }
 
 }

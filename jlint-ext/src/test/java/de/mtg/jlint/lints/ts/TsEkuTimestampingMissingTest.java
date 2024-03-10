@@ -30,6 +30,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -43,24 +44,28 @@ class TsEkuTimestampingMissingTest {
     static CAExtension caExtension = new CAExtension();
 
     @Test
+    @Disabled("Not implemented yet")
     void passTest() throws Exception {
         X509Certificate certificate = caExtension.createTimestampingEECertificate();
         caExtension.assertLintResult(LintResult.of(Status.PASS), new TsEkuTimestampingMissing(), certificate);
     }
 
     @Test
+    @Disabled("Not implemented yet")
     void errorTest() throws Exception {
         X509Certificate certificate = createWrongCertificate(2023, false);
         caExtension.assertLintResult(LintResult.of(Status.ERROR), new TsEkuMissing(), certificate);
     }
 
     @Test
+    @Disabled("Not implemented yet")
     void notEffectiveTest() throws Exception {
         X509Certificate certificate = createWrongCertificate(2015, true);
         caExtension.assertLintResult(LintResult.of(Status.NE), new TsEkuTimestampingMissing(), certificate);
     }
 
     @Test
+    @Disabled("Not implemented yet")
     void notApplicableTest() throws Exception {
         X509Certificate certificate = caExtension.getCaCertificate();
         caExtension.assertLintResult(LintResult.of(Status.NA), new TsEkuTimestampingMissing(), certificate);

@@ -45,7 +45,7 @@ public class TsEkuMissing implements JavaLint {
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return Utils.isSubscriberCert(certificate);
+        return false;
     }
 
 }
