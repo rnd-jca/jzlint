@@ -268,6 +268,7 @@ public class CAExtension implements BeforeAllCallback {
         certificateBuilder.addExtension(akie);
         certificateBuilder.addExtension(skie);
         certificateBuilder.addExtension(eku);
+        certificateBuilder.addExtension(getCertificatePolicies("2.23.140.1.5.1.2"));
         ContentSigner contentSigner = new JcaContentSignerBuilder(SHA_256_WITH_RSA_ENCRYPTION).setProvider(BouncyCastleProvider.PROVIDER_NAME).build(caPrivateKey);
         X509CertificateHolder x509CertificateHolder = certificateBuilder.build(contentSigner);
 
@@ -328,6 +329,15 @@ public class CAExtension implements BeforeAllCallback {
         CertificatePolicies cps = new CertificatePolicies(policiesList.toArray(policies));
         return Optional.of(new Extension(Extension.certificatePolicies, false, cps.toASN1Primitive().getEncoded(ASN1Encoding.DER)));
 
+    }
+
+    public static Extension getCertificatePolicies(String policyOID) throws IOException {
+        PolicyInformation[] policies = new PolicyInformation[1];
+        List<PolicyInformation> policiesList = new ArrayList<>();
+        PolicyInformation policyInformation = new PolicyInformation(new ASN1ObjectIdentifier(policyOID));
+        policiesList.add(policyInformation);
+        CertificatePolicies cps = new CertificatePolicies(policiesList.toArray(policies));
+        return new Extension(Extension.certificatePolicies, false, cps.toASN1Primitive().getEncoded(ASN1Encoding.DER));
     }
 
 }

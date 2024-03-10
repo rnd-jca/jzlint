@@ -4,6 +4,7 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.List;
 
+import de.mtg.jzlint.utils.SMIMEUtils;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.x509.CertificatePolicies;
 import org.bouncycastle.asn1.x509.Extension;
@@ -91,7 +92,7 @@ public class SmimeCertificatePoliciesContainReservedPolicyOid implements JavaLin
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return Utils.isSubscriberCert(certificate) && Utils.hasCertificatePoliciesExtension(certificate);
+        return SMIMEUtils.isSMIMEBRSubscriberCertificate(certificate) && Utils.hasCertificatePoliciesExtension(certificate);
     }
 
 }

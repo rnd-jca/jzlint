@@ -109,7 +109,7 @@ class SmimeCertificatePoliciesExtensionCriticalTest {
         PolicyInformation[] policies = new PolicyInformation[1];
         List<PolicyInformation> policiesList = new ArrayList<>();
 
-        PolicyInformation policyInformation = new PolicyInformation(new ASN1ObjectIdentifier("1.2.3.4"));
+        PolicyInformation policyInformation = new PolicyInformation(new ASN1ObjectIdentifier("2.23.140.1.5.1.2"));
         policiesList.add(policyInformation);
 
         CertificatePolicies cps = new CertificatePolicies(policiesList.toArray(policies));

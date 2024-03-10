@@ -2,6 +2,7 @@ package de.mtg.jlint.lints.smime;
 
 import java.security.cert.X509Certificate;
 
+import de.mtg.jzlint.utils.SMIMEUtils;
 import org.bouncycastle.asn1.ASN1BMPString;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1IA5String;
@@ -98,7 +99,7 @@ public class SmimeCertificatePoliciesContainExplicitTextUnotice implements JavaL
     @Override
     public boolean checkApplies(X509Certificate certificate) {
 
-        if (!Utils.isSubscriberCert(certificate)) {
+        if (!SMIMEUtils.isSMIMEBRSubscriberCertificate(certificate)) {
             return false;
         }
 

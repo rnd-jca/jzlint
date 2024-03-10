@@ -2,6 +2,7 @@ package de.mtg.jlint.lints.smime;
 
 import java.security.cert.X509Certificate;
 
+import de.mtg.jzlint.utils.SMIMEUtils;
 import org.bouncycastle.asn1.x509.Extension;
 
 import de.mtg.jzlint.EffectiveDate;
@@ -40,7 +41,7 @@ public class SmimeCrlDistributionPointsExtensionCritical implements JavaLint {
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return Utils.isSubscriberCert(certificate) && Utils.hasCRLDPExtension(certificate);
+        return SMIMEUtils.isSMIMEBRSubscriberCertificate(certificate) && Utils.hasCRLDPExtension(certificate);
     }
 
 }

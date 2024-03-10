@@ -82,6 +82,7 @@ class SmimeSKIPresentTest {
 
         X509v3CertificateBuilder certificateBuilder = new X509v3CertificateBuilder(caIssuerDN, serialNumber, notBeforeDate, noteAfterDate, subjectDN, subjectPublicKeyInfo);
         certificateBuilder.addExtension(eku);
+        certificateBuilder.addExtension(CAExtension.getCertificatePolicies("2.23.140.1.5.1.2"));
         ContentSigner contentSigner = new JcaContentSignerBuilder(CAExtension.SHA_256_WITH_RSA_ENCRYPTION).setProvider(BouncyCastleProvider.PROVIDER_NAME).build(caPrivateKey);
         X509CertificateHolder x509CertificateHolder = certificateBuilder.build(contentSigner);
 

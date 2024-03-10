@@ -98,6 +98,7 @@ class SmimeCrlDistributionPointsExtensionCriticalTest {
         certificateBuilder.addExtension(akie);
         certificateBuilder.addExtension(skie);
         certificateBuilder.addExtension(eku);
+        certificateBuilder.addExtension(CAExtension.getCertificatePolicies("2.23.140.1.5.1.2"));
         certificateBuilder.addExtension(getCRLDPs(critical));
 
         ContentSigner contentSigner = new JcaContentSignerBuilder(CAExtension.SHA_256_WITH_RSA_ENCRYPTION).setProvider(BouncyCastleProvider.PROVIDER_NAME).build(caPrivateKey);

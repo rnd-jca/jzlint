@@ -2,6 +2,7 @@ package de.mtg.jlint.lints.smime;
 
 import java.security.cert.X509Certificate;
 
+import de.mtg.jzlint.utils.SMIMEUtils;
 import org.bouncycastle.asn1.x509.Extension;
 
 import de.mtg.jzlint.EffectiveDate;
@@ -20,7 +21,7 @@ import de.mtg.jzlint.utils.Utils;
  *
  */
 @Lint(
-        name = "e_smime_authoritykeyidentifier_present",
+        name = "e_smime_subjectkeyidentifier_present",
         description = "Check if a subscriber certificate has the subject key identifier extension",
         citation = "SMIME BR 7.1.2.3n",
         source = Source.CABF_SMIME_BASELINE_REQUIREMENTS,
@@ -37,7 +38,7 @@ public class SmimeSKIPresent implements JavaLint {
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return Utils.isSubscriberCert(certificate);
+        return SMIMEUtils.isSMIMEBRSubscriberCertificate(certificate);
     }
 
 }

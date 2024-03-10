@@ -8,6 +8,7 @@ import de.mtg.jzlint.Lint;
 import de.mtg.jzlint.LintResult;
 import de.mtg.jzlint.Source;
 import de.mtg.jzlint.Status;
+import de.mtg.jzlint.utils.SMIMEUtils;
 import de.mtg.jzlint.utils.Utils;
 
 /**
@@ -33,7 +34,7 @@ public class SmimeAiaPresent implements JavaLint {
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-        return Utils.isSubscriberCert(certificate);
+        return SMIMEUtils.isSMIMEBRSubscriberCertificate(certificate);
     }
 
 }

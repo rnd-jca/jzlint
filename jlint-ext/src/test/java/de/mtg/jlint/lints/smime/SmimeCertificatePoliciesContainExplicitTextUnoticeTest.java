@@ -118,7 +118,7 @@ class SmimeCertificatePoliciesContainExplicitTextUnoticeTest {
         ASN1EncodableVector vector = new ASN1EncodableVector();
         vector.add(policyQualifierInfo);
         PolicyInformation[] policies = new PolicyInformation[1];
-        PolicyInformation policyInformation = new PolicyInformation(new ASN1ObjectIdentifier("1.2.3"), new DERSequence(vector));
+        PolicyInformation policyInformation = new PolicyInformation(new ASN1ObjectIdentifier("2.23.140.1.5.1.2"), new DERSequence(vector));
         policiesList.add(policyInformation);
         CertificatePolicies cps = new CertificatePolicies(policiesList.toArray(policies));
 
