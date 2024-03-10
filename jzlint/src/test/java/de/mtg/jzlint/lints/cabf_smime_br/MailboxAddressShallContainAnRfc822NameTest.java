@@ -81,4 +81,20 @@ class MailboxAddressShallContainAnRfc822NameTest {
     void testCase09() {
     }
 
+    @LintTest(
+            name = "e_mailbox_address_shall_contain_an_rfc822_name",
+            filename = "smime/MailboxAddressFromSAN/sponsorValidatedMultipurposeEmailInSubjectNotInSAN.pem",
+            expectedResultStatus = Status.ERROR,
+            certificateDescription = "fail - subject:commonName email address does not match san:emailAddress, certificate is sponsor validated")
+    void testCase10() {
+    }
+
+    @LintTest(
+            name = "e_mailbox_address_shall_contain_an_rfc822_name",
+            filename = "smime/MailboxAddressFromSAN/sponsorValidatedMultipurposePersonalNameInCN.pem",
+            expectedResultStatus = Status.PASS,
+            certificateDescription = "pass - subject:commonName is personal name, san:emailAddress contains an email")
+    void testCase11() {
+    }
+
 }

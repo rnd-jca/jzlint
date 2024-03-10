@@ -29,7 +29,7 @@ class StrictMultipurposeSmimeExtSubjectDirectoryAttrTest {
             name = "e_strict_multipurpose_smime_ext_subject_directory_attr",
             filename = "smime/ec_legacy_digital_signature_ku.pem",
             expectedResultStatus = Status.NA,
-            certificateDescription = "error - legacy no subject dir attributes extension")
+            certificateDescription = "NA - legacy no subject dir attributes extension")
     void testCase03() {
     }
 

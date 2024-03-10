@@ -156,6 +156,10 @@ public final class SMIMEUtils {
                 isStrictSMIMECertificate(certificate);
     }
 
+    public static boolean isSMIMEBRSubscriberCertificate(X509Certificate certificate) {
+        return Utils.isSubscriberCert(certificate) && isSMIMEBRCertificate(certificate);
+    }
+
     public static boolean isOrganizationValidatedCertificate(X509Certificate certificate) {
         byte[] rawCertificatePolicies = certificate.getExtensionValue(Extension.certificatePolicies.getId());
 

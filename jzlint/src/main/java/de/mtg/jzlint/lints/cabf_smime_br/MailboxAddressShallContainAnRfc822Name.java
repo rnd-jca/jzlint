@@ -5,12 +5,8 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
-import org.bouncycastle.asn1.x509.Extension;
-import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.X509ObjectIdentifiers;
 
 import de.mtg.jzlint.EffectiveDate;
@@ -71,17 +67,7 @@ public class MailboxAddressShallContainAnRfc822Name implements JavaLint {
 
     @Override
     public boolean checkApplies(X509Certificate certificate) {
-
-        if (Utils.hasExtendedKeyUsageExtension(certificate)) {
-            byte[] rawEKU = certificate.getExtensionValue(Extension.extendedKeyUsage.getId());
-            ExtendedKeyUsage extendedKeyUsage = ExtendedKeyUsage.getInstance(ASN1OctetString.getInstance(rawEKU).getOctets());
-            if (extendedKeyUsage.hasKeyPurposeId(KeyPurposeId.id_kp_emailProtection) ||
-                    extendedKeyUsage.hasKeyPurposeId(KeyPurposeId.anyExtendedKeyUsage)) {
-                return true;
-            }
-        }
-
-        return SMIMEUtils.isMailboxValidatedCertificate(certificate) && Utils.isSubscriberCert(certificate);
+        return SMIMEUtils.isSMIMEBRSubscriberCertificate(certificate);
     }
 
 }

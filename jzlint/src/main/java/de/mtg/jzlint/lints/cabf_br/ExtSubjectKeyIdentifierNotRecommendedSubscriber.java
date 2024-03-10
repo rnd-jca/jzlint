@@ -33,7 +33,7 @@ import de.mtg.jzlint.utils.Utils;
 
 @Lint(
         name = "w_ext_subject_key_identifier_not_recommended_subscriber",
-        description = "Subcriber certificates use of Subject Key Identifier is NOT RECOMMENDED",
+        description = "Subscriber certificates use of Subject Key Identifier is NOT RECOMMENDED",
         citation = "BRs v2: 7.1.2.7.6",
         source = Source.CABF_BASELINE_REQUIREMENTS,
         effectiveDate = EffectiveDate.SC62_EFFECTIVE_DATE)
