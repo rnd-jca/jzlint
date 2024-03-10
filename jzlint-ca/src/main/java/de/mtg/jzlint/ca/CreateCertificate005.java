@@ -85,6 +85,28 @@ public class CreateCertificate005 {
             System.out.println(String.format("openssl x509 -inform DER -outform PEM -in %s -out %s -text", nameDER, namePEM));
         }
 
+        {
+            X509Certificate testCertificate = createTestCertificate(rootPublicKey, rootPrivateKey, caIssuerDN, "C=DE");
+            String name = "dvCountry";
+            String nameDER = String.format("%s.der", name);
+            String namePEM = String.format("%s.pem", name);
+
+            Files.write(Paths.get(nameDER), testCertificate.getEncoded());
+
+            System.out.println(String.format("openssl x509 -inform DER -outform PEM -in %s -out %s -text", nameDER, namePEM));
+        }
+
+        {
+            X509Certificate testCertificate = createTestCertificate(rootPublicKey, rootPrivateKey, caIssuerDN, null);
+            String name = "dvEmptySubject";
+            String nameDER = String.format("%s.der", name);
+            String namePEM = String.format("%s.pem", name);
+
+            Files.write(Paths.get(nameDER), testCertificate.getEncoded());
+
+            System.out.println(String.format("openssl x509 -inform DER -outform PEM -in %s -out %s -text", nameDER, namePEM));
+        }
+
     }
 
     /**
@@ -114,7 +136,12 @@ public class CreateCertificate005 {
         PublicKey publicKey = keyPair.getPublic();
         SubjectPublicKeyInfo subjectPublicKeyInfo = SubjectPublicKeyInfo.getInstance(publicKey.getEncoded());
 
-        X500Name x500SubjectDN = new X500Name(subjectDN);
+        X500Name x500SubjectDN;
+        if (subjectDN != null) {
+            x500SubjectDN = new X500Name(subjectDN);
+        } else {
+            x500SubjectDN = new X500Name("");
+        }
 
         AuthorityKeyIdentifier aki = new JcaX509ExtensionUtils().createAuthorityKeyIdentifier(caPublicKey);
         Extension akie = new Extension(Extension.authorityKeyIdentifier, false, aki.toASN1Primitive().getEncoded(ASN1Encoding.DER));
