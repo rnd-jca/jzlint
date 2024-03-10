@@ -36,17 +36,20 @@ public class MailboxAddressShallContainAnRfc822Name implements JavaLint {
 
             for (AttributeTypeAndValue attributeTypeAndValue : commonName) {
                 String email = attributeTypeAndValue.getValue().toString();
-                subjectEmails.add(email);
+                if (SMIMEUtils.isValidEmailAddress(email)) {
+                    subjectEmails.add(email);
+                }
             }
             List<AttributeTypeAndValue> dnEmails = Utils.getSubjectDNNameComponent(certificate, BCStyle.EmailAddress.getId());
             for (AttributeTypeAndValue attributeTypeAndValue : dnEmails) {
                 String email = attributeTypeAndValue.getValue().toString();
-                subjectEmails.add(email);
+                if (SMIMEUtils.isValidEmailAddress(email)) {
+                    subjectEmails.add(email);
+                }
             }
 
             List<String> dirNames = Utils.getDirNames(certificate);
-            dirNames.stream().forEach(subjectEmails::add);
-
+            subjectEmails.addAll(dirNames);
 
             List<String> sanEmails = Utils.getEmails(certificate);
             sanEmails.addAll(SMIMEUtils.getSmtpUTF8Mailboxes(certificate));

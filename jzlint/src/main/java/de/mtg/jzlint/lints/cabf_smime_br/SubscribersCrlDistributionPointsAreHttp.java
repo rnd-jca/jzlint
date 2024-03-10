@@ -45,11 +45,11 @@ public class SubscribersCrlDistributionPointsAreHttp implements JavaLint {
                 GeneralNames generalNames = (GeneralNames) distributionPointName.getName();
                 GeneralName[] generalNamesArray = generalNames.getNames();
                 for (GeneralName generalName : generalNamesArray) {
-                    crldpCount = +1;
+                    crldpCount += 1;
                     if (generalName.getTagNo() == 6) {
                         ASN1IA5String asn1IA5String = (ASN1IA5String) generalName.getName();
                         if (asn1IA5String.getString().startsWith("http://") || asn1IA5String.getString().startsWith("https://")) {
-                            httpCount = +1;
+                            httpCount += 1;
                         }
                     }
                 }
